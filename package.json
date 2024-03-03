@@ -1,0 +1,23 @@
+{
+  "type": "module",
+  "scripts": {
+    "compile": "tsc && cp -R src/configs/*.graphql dist/configs",
+    "start": "npm run compile && node ./dist/index.js"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "@graphql-tools/graphql-file-loader": "^8.0.0",
+    "@graphql-tools/load": "^8.0.1",
+    "@graphql-tools/schema": "^10.0.2",
+    "@prisma/client": "^5.10.2",
+    "copyfiles": "^2.4.1",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.8.1",
+    "prisma": "^5.10.2",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "typescript": "^5.3.3"
+  }
+}
