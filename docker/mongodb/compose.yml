@@ -14,7 +14,7 @@ services:
       - ./db/config:/data/configdb
     env_file:
       - .env
-    #restart: always
+    restart: always
 
   mongo-express:
     image: mongo-express
@@ -29,4 +29,4 @@ services:
       ME_CONFIG_BASICAUTH_PASSWORD: ${BASICAUTH_PASSWD}
     env_file:
       - .env
-    #restart: always
+    restart: always

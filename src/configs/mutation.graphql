@@ -1,3 +1,5 @@
 type Mutation {
-  post(title: String, author: String): Data
+  createData(title: String, author: String): Data
+  updateData(id: ID!, title: String, author: String): Data
+  deleteData(id: ID!): Boolean
 }

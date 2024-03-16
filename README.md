@@ -15,5 +15,8 @@ $ cd ../..
 $ npm ci
 $ npx prisma migrate dev --name sample
 $ npx prisma generate
+// production
 $ npm start
+// develop
+$ npm run dev
 ```

@@ -1,3 +1,9 @@
 type Query {
-  datas: [Data!]!
+  getDatas(filter: DataFilterInput): [Data!]!
+}
+
+input DataFilterInput {
+  id: ID
+  title: String
+  author: String
 }
