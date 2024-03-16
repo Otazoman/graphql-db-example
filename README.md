@@ -19,4 +19,6 @@ $ npx prisma generate
 $ npm start
 // develop
 $ npm run dev
+// test
+$ npm test
 ```

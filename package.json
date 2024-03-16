@@ -4,22 +4,25 @@
     "compile": "tsc && cp -R src/configs/*.graphql dist/configs",
     "start": "npm run compile && node ./dist/index.js",
     "dev": "nodemon --watch ./src/**/*.ts --exec ts-node ./src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "dependencies": {
     "@apollo/server": "^4.10.0",
     "@graphql-tools/graphql-file-loader": "^8.0.0",
     "@graphql-tools/load": "^8.0.1",
     "@graphql-tools/schema": "^10.0.2",
-    "@prisma/client": "^5.10.2",
     "copyfiles": "^2.4.1",
     "dotenv": "^16.4.5",
     "graphql": "^16.8.1",
     "prisma": "^5.10.2"
   },
   "devDependencies": {
+    "@prisma/client": "^5.11.0",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.11.25",
     "nodemon": "^3.1.0",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
   }
