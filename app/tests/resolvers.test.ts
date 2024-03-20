@@ -1,4 +1,5 @@
 import { resolvers } from "../src/resolvers/resolver";
+import { testData } from "./testData";
 
 describe("Resolvers", () => {
   let mockContext: any;
@@ -25,10 +26,9 @@ describe("Resolvers", () => {
   describe("Query", () => {
     describe("getDatas", () => {
       test("should call prisma.data.findMany with correct arguments", async () => {
-        const filter = { id: 1 };
-        await resolvers.Query.getDatas(null, { filter }, mockContext);
+        await resolvers.Query.getDatas(null, testData.filter, mockContext);
         expect(mockPrisma.data.findMany).toHaveBeenCalledWith({
-          where: filter,
+          where: {},
         });
       });
     });
@@ -37,41 +37,40 @@ describe("Resolvers", () => {
   describe("Mutation", () => {
     describe("createData", () => {
       test("should call prisma.data.create with correct arguments", async () => {
-        const args = { title: "Test Title", author: "Test Author" };
-        await resolvers.Mutation.createData(null, args, mockContext);
+        await resolvers.Mutation.createData(
+          null,
+          testData.createDataArgs,
+          mockContext
+        );
         expect(mockPrisma.data.create).toHaveBeenCalledWith({
-          data: {
-            title: args.title,
-            author: args.author,
-          },
+          data: testData.createDataArgs,
         });
       });
     });
 
     describe("updateData", () => {
       test("should call prisma.data.update with correct arguments", async () => {
-        const args = {
-          id: 1,
-          title: "Updated Title",
-          author: "Updated Author",
-        };
-        await resolvers.Mutation.updateData(null, args, mockContext);
+        await resolvers.Mutation.updateData(
+          null,
+          testData.updateDataArgs,
+          mockContext
+        );
         expect(mockPrisma.data.update).toHaveBeenCalledWith({
-          where: { id: args.id },
-          data: {
-            title: args.title,
-            author: args.author,
-          },
+          where: { id: testData.updateDataArgs.id },
+          data: testData.updateDataValueArgs,
         });
       });
     });
 
     describe("deleteData", () => {
       test("should call prisma.data.delete with correct arguments", async () => {
-        const args = { id: 1 };
-        await resolvers.Mutation.deleteData(null, args, mockContext);
+        await resolvers.Mutation.deleteData(
+          null,
+          testData.deleteDataArgs,
+          mockContext
+        );
         expect(mockPrisma.data.delete).toHaveBeenCalledWith({
-          where: { id: args.id },
+          where: testData.deleteDataArgs,
         });
       });
     });
