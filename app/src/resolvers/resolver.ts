@@ -1,17 +1,31 @@
 import { PrismaClient } from "@prisma/client";
+import { PubSub } from "graphql-subscriptions";
+import { searchSettings } from "./conditions";
+import { DataArgs } from "./data";
 
-const prisma = new PrismaClient();
+const pubsub = new PubSub();
 
 export const resolvers = {
   Query: {
     getDatas: async (parent, { filter }, context) => {
       let where = {};
       if (filter) {
-        where = { ...filter };
+        Object.entries(searchSettings).forEach(([key, setting]) => {
+          if (filter[key] && setting.enabled) {
+            where = {
+              ...where,
+              [setting.fieldName]: {
+                [setting.operator]: filter[key],
+              },
+            };
+          }
+        });
+
         if (filter.id !== undefined && typeof filter.id === "string") {
           where = { ...where, id: parseInt(filter.id, 10) };
         }
       }
+
       if (!context.prisma) {
         context.prisma = new PrismaClient();
       }
@@ -27,11 +41,9 @@ export const resolvers = {
       }
       try {
         const newData = await context.prisma.data.create({
-          data: {
-            title: args.title,
-            author: args.author,
-          },
+          data: DataArgs(args),
         });
+        pubsub.publish("DATA_CHANGED", { dataChanged: newData });
         return newData;
       } catch (error) {
         console.error("Error creating data:", error);
@@ -47,11 +59,9 @@ export const resolvers = {
           where: {
             id: parseInt(args.id),
           },
-          data: {
-            title: args.title,
-            author: args.author,
-          },
+          data: DataArgs(args),
         });
+        pubsub.publish("DATA_CHANGED", { dataChanged: updatedData });
         return updatedData;
       } catch (error) {
         console.error("Error updating data:", error);
@@ -68,11 +78,19 @@ export const resolvers = {
             id: parseInt(args.id),
           },
         });
+        pubsub.publish("DATA_CHANGED", {
+          dataChanged: { id: parseInt(args.id) },
+        });
         return true;
       } catch (error) {
         console.error("Error deleting data:", error);
         throw new Error("Failed to delete data");
       }
+    },
+  },
+  Subscription: {
+    dataChanged: {
+      subscribe: () => pubsub.asyncIterator(["DATA_CHANGED"]),
     },
   },
 };
