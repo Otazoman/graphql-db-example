@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  graphql-sample-postgressql-db:
+    container_name: postgres_backend_db
+    build: .
+    environment:
+      POSTGRES_USER: ${USER_NAME}
+      POSTGRES_PASSWORD: ${USER_PASS}
+      PGPASSWORD: ${PG_PASS}
+      POSTGRES_DB: ${POSTGRE_DB}
+      TZ: ${TZ}
+    ports:
+      - ${DB_DOCKER_PORT}:5432
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/conf:/etc/postgresql/ 
+    env_file:
+      - .env
+    restart: always
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
+    ports:
+      - '${ADMIN_DOCKER_PORT}:80'
+    restart: always
+
+

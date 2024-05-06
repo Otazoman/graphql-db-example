@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "provider"
+  url      = env("DATABASE_URL")
+}
+
+
+model Data {
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  author String
+  createdAt DateTime @default(now())
+}

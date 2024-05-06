@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  node:
+    container_name: ${CONTAINER_NAME}
+    user: ${UID}:${GID}
+    build:
+      context: .
+      args:
+        UID: ${UID}
+        GID: ${GID}
+        USERNAME: ${USERNAME}
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - ${APPDIR}:/app
+    ports:
+      - '${APPOLLO_DOCKER_PORT}:4000'
+    environment:
+      - DEV_MODE
+    command: >
+      sh -c "npm install && 
+             npm run build && 
+             if [ \"$DEV_MODE\" = \"true\" ]; then npm run dev; else npm start; fi"
+    restart: always

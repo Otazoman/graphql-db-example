@@ -1,0 +1,30 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "tsc && mkdir -p dist/src/graphql && cp -R src/graphql/*.graphql dist/src/graphql/",
+    "start": "npm run build && node --experimental-loader=ts-node/esm --es-module-specifier-resolution=node ./dist/src/index.js",
+    "dev": "nodemon --watch ./*.ts --watch ./src/**/*.ts --exec 'tsc && cp -R src/graphql/*.graphql dist/src/graphql && tsx src/index.ts'",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "@graphql-tools/graphql-file-loader": "^8.0.0",
+    "@graphql-tools/load": "^8.0.1",
+    "@graphql-tools/schema": "^10.0.2",
+    "copyfiles": "^2.4.1",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.8.1",
+    "graphql-subscriptions": "^2.0.0",
+    "tsx": "^4.7.1"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.11.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.25",
+    "nodemon": "^3.1.0",
+    "prisma": "^5.11.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}
