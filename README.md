@@ -39,6 +39,7 @@ $ mkdir -p db
 $ sudo mkdir db/data
 $ sudo mkdir db/conf
 $ sudo mkdir db/log
+$ sudo mkdir db/docker-entrypoint-initdb.d
 $ sudo tee conf/my.cnf <<_EOF_
 [mysqld]
 character-set-server=utf8mb4
@@ -47,16 +48,17 @@ collation-server=utf8mb4_unicode_ci
 [client]
 default-character-set=utf8mb4
 _EOF_
+$ MYSQL_USER=mysqluser
+$ sudo tee docker-entrypoint-initdb.d/init.sql <<_EOF_
+GRANT ALL ON *.* TO '${MYSQL_USER}'@'%';
+FLUSH PRIVILEGES;
+_EOF_
 # After the above implementation,Work performed on Ⅱ.Start containers
-# In phpMyadmin, under [Home], select [User Accounts] and in [Edit Permissions] for the user [mysqluser].
-Check all in [Data] and [Structure] and click [Run].
 # Work performed on Ⅲ.Migration & generate
-
 
 #
 # Ⅰ-C.mongo
 #
-
 $ cd graphql-db-example/docker/mongodb/
 $ sudo mkdir db
 $ cd db
@@ -138,8 +140,8 @@ $ docker container exec -it node-dev sh
 /app $ npx prisma migrate dev --name sample --schema prisma/pg/postgre_schema.prisma
 /app $ npx prisma generate --schema prisma/pg/postgre_schema.prisma
 /app $ exit
-$ docker compose --env-file ./config/.env.dev restart
-
+$ docker stop node-dev
+$ docker compose --env-file ./config/.env.dev -p $NETWORK_NAME start
 
 #
 # Ⅲ-B.Migration & generate (MySQL)
@@ -148,16 +150,16 @@ $ docker container exec -it node-dev sh
 /app $ npx prisma migrate dev --name sample --schema prisma/mysql/mysql_schema.prisma
 /app $ npx prisma generate --schema prisma/mysql/mysql_schema.prisma
 /app $ exit
-$ docker compose --env-file ./config/.env.dev restart
-
+$ docker stop node-dev
+$ docker compose --env-file ./config/.env.dev -p $NETWORK_NAME start
 
 #
 # Ⅲ-C.Migration (mongoDB)
 #
 $ docker container exec -it node-dev sh
 $ npx prisma db push --schema prisma/mongo/mongo_schema.prisma
-$ docker compose --env-file ./config/.env.dev  restart
-
+$ docker stop node-dev
+$ docker compose --env-file ./config/.env.dev -p $NETWORK_NAME start
 
 #
 # Ⅲ-D.Migration & generate (SQLite)
@@ -166,10 +168,8 @@ $ docker container exec -it node-dev sh
 /app $ npx prisma migrate dev --name sample --schema prisma/sqlite/sqlite_schema.prisma
 /app $ npx prisma generate --schema prisma/sqlite/sqlite_schema.prisma
 /app $ exit
-$ docker compose --env-file ./config/.env.dev restart
-
-
-
+$ docker stop node-dev
+$ docker compose --env-file ./config/.env.dev -p $NETWORK_NAME start
 
 ```
 
