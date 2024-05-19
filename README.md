@@ -26,7 +26,7 @@ $ git clone https://github.com/Otazoman/graphql-db-example.git
 $ cd graphql-db-example/docker/postgresql
 $ mkdir -p pgadmin
 $ chmod 777 pgadmin
-# After the above implementation, Work performed on Ⅱ.Start containers and Ⅲ.Migration & generate
+# After the above implementation, Work performed on Ⅱ.Start containers and Ⅲ-A.Migration & generate (PostgreSQL)
 $ cd ../postgresql
 $ sudo chmod -R 777 db
 $ sudo chmod -R 777 pgadmin
@@ -53,8 +53,7 @@ $ sudo tee docker-entrypoint-initdb.d/init.sql <<_EOF_
 GRANT ALL ON *.* TO '${MYSQL_USER}'@'%';
 FLUSH PRIVILEGES;
 _EOF_
-# After the above implementation,Work performed on Ⅱ.Start containers
-# Work performed on Ⅲ.Migration & generate
+# After the above implementation, Work performed on Ⅱ.Start containers and Ⅲ-B.Migration & generate (MySQL)
 
 #
 # Ⅰ-C.mongo
@@ -112,7 +111,8 @@ _EOF_
 
 $ sudo chmod -R 777 init
 $ cd ../
-# After the above implementation,Work performed on Ⅱ.Start containers
+# After the above implementation, Work performed on Ⅱ.Start containers and Ⅲ-C.Migration (mongoDB)
+
 
 #
 # Ⅰ-D.SQLite
